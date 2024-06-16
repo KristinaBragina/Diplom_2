@@ -18,7 +18,7 @@ def create_new_user_and_delete():
 
     yield payload_cred, response_body
 
-    access_token = response.json()['accessToken']
+    access_token = response_body['accessToken']
     requests.delete(Urls.user_delete, headers={'Authorization': access_token})
 
 
