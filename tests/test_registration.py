@@ -18,13 +18,12 @@ class TestRegistration:
         }
         response = requests.post(Urls.user_register, data=payload)
         deserials = response.json()
-        assert (response.status_code == 200 and
-                deserials['success'] is True and
-                'accessToken' in deserials.keys() and
-                'refreshToken' in deserials.keys() and
-                deserials['user']['email'] == payload['email'] and
-                deserials['user']['name'] == payload['name']
-                )
+        assert response.status_code == 200
+        assert deserials['success'] is True
+        assert 'accessToken' in deserials.keys()
+        assert 'refreshToken' in deserials.keys()
+        assert deserials['user']['email'] == payload['email']
+        assert deserials['user']['name'] == payload['name']
         # удаление использованных тестовых данных из базы после теста
         access_token = deserials['accessToken']
         requests.delete(Urls.user_delete, headers={'Authorization': access_token})
@@ -38,10 +37,6 @@ class TestRegistration:
         response = requests.post(Urls.user_register, data=credentials)
         assert (response.status_code == 403 and response.json() ==
                 {'success': False, 'message': 'Email, password and name are required fields'})
-        # удаление использованных тестовых данных из базы после теста, если вдруг пользователь создался
-        if response.status_code == 200:
-            access_token = response.json()['accessToken']
-            requests.delete(Urls.user_delete, headers={'Authorization': access_token})
 
     @allure.title('Проверка ответа на запрос регистрации с существующим в базе email')
     @allure.description('В тесте используется email уже зарегистрированного аккаунта. Если новый аккаунт '
@@ -54,7 +49,3 @@ class TestRegistration:
         }
         response = requests.post(Urls.user_register, data=payload)
         assert response.status_code == 403 and response.json() == {'success': False, 'message': 'User already exists'}
-        # удаление использованных тестовых данных из базы после теста, если вдруг пользователь создался
-        if response.status_code == 200:
-            access_token = response.json()['accessToken']
-            requests.delete(Urls.user_delete, headers={'Authorization': access_token})

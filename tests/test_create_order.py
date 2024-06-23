@@ -12,11 +12,10 @@ class TestCreateOrder:
         payload = {'ingredients': [burger_ingredients]}
         response = requests.post(Urls.order_create, data=payload, headers=headers)
         deserials = response.json()
-        assert (response.status_code == 200 and
-                deserials['success'] is True and
-                'name' in deserials.keys() and
-                'number' in deserials['order'].keys()
-                )
+        assert response.status_code == 200
+        assert deserials['success'] is True
+        assert 'name' in deserials.keys()
+        assert 'number' in deserials['order'].keys()
 
     @allure.title('Проверка ответа о создании заказа на запрос с указанными ингредиентами неаутентифицированным юзером')
     @allure.description('С помощью параметризации выполняем два теста: по очереди отправляем запросы '

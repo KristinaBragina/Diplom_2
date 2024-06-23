@@ -10,10 +10,10 @@ class TestGetOrders:
         headers = {'Authorization': create_user_and_order_and_delete[0]}
         response = requests.get(Urls.get_user_orders, headers=headers)
         deserials = response.json()
-        assert (response.status_code == 200 and
-                deserials['success'] is True and
-                'orders' in deserials.keys() and
-                'total' in deserials.keys())
+        assert response.status_code == 200
+        assert deserials['success'] is True
+        assert 'orders' in deserials.keys()
+        assert 'total' in deserials.keys()
 
     @allure.title('Проверка ответа при запросе на получение списка заказов неаутентифицированного пользователя')
     def test_get_orders_unauthenticated_user_success(self):
