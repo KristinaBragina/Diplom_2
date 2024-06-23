@@ -23,8 +23,8 @@ class TestAuthentication:
             'password': UsersData.password,
         }
         response = requests.post(Urls.user_auth, data=payload)
-        assert response.status_code == 401
-        assert response.json() == {"success": False, "message": "email or password are incorrect"}
+        assert response.status_code == 401 and response.json() == {"success": False,
+                                                                   "message": "email or password are incorrect"}
 
     @allure.title('Проверка ответа на запрос аутентификации с неверным паролем')
     def test_auth_with_wrong_passwd_expected_error(self):
@@ -33,5 +33,5 @@ class TestAuthentication:
             'password': create_random_password(),
         }
         response = requests.post(Urls.user_auth, data=payload)
-        assert response.status_code == 401
-        assert response.json() == {"success": False, "message": "email or password are incorrect"}
+        assert response.status_code == 401 and response.json() == {"success": False,
+                                                                   "message": "email or password are incorrect"}
